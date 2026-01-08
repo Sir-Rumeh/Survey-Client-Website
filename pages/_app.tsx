@@ -1,6 +1,7 @@
-import "../styles/globals.css";
+import "../src/styles/globals.css";
 import type { AppProps } from "next/app";
 import { useEffect } from "react";
+import WebsiteLayout from "../src/layout/WebsiteLayout";
 
 export default function App({ Component, pageProps }: AppProps) {
 	// Ensure dark class is synced with user preference (simple client side init)
@@ -9,5 +10,9 @@ export default function App({ Component, pageProps }: AppProps) {
 		if (stored === "dark") document.documentElement.classList.add("dark");
 	}, []);
 
-	return <Component {...pageProps} />;
+	return (
+		<WebsiteLayout>
+			<Component {...pageProps} />
+		</WebsiteLayout>
+	);
 }
