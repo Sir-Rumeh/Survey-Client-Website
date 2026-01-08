@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const Navbar = () => {
 	return (
@@ -15,21 +16,21 @@ const Navbar = () => {
 				</div>
 
 				<div className="hidden md:flex items-center gap-8 text-green-800 font-medium">
-					<a href="#" className="text-green-600 border-b-2 border-green-600">
+					<Link href="/" className="text-green-600 border-b-2 border-green-600">
 						Home
-					</a>
-					<a href="#" className="hover:text-green-600 transition">
+					</Link>
+
+					<Link href="/about" className="hover:text-green-600 transition">
 						About us
-					</a>
-					<a href="#" className="hover:text-green-600 transition">
-						Overview
-					</a>
-					<a href="#" className="hover:text-green-600 transition">
+					</Link>
+
+					<Link href="/blog" className="hover:text-green-600 transition">
 						Blog
-					</a>
-					<a href="#" className="hover:text-green-600 transition">
+					</Link>
+
+					<Link href="/contact" className="hover:text-green-600 transition">
 						Contact
-					</a>
+					</Link>
 				</div>
 
 				<div className="flex items-center gap-3">
