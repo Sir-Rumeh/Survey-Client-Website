@@ -2,7 +2,7 @@ import React from "react";
 
 const Navbar = () => {
 	return (
-		<nav className="max-w-7xl mx-auto mt-6 px-4">
+		<nav className="max-w-7xl mx-auto mt-6 px-4 md:sticky md:top-0 md:z-40">
 			<div className="bg-white/80 backdrop-blur-md rounded-xl py-3 px-6 flex items-center justify-between shadow-sm border border-white">
 				<div className="flex items-center gap-2">
 					{/* Replace with actual SVG logo */}

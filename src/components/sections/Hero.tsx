@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const Hero = () => {
 	return (
-		<section className="pt-16 pb-0 px-4 flex flex-col items-center text-center">
+		<section className="pt-28 pb-0 px-4 flex flex-col items-center text-center">
 			<h1 className="text-5xl md:text-7xl font-extrabold text-green-700 leading-tight">
 				Data and Insights <br /> Delivered.
 			</h1>
