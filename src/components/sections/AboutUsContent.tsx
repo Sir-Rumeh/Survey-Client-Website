@@ -80,17 +80,17 @@ const AboutUsContent = () => {
 						Download Mobile App Today
 					</h3>
 					<div className="flex flex-wrap justify-center gap-4">
-						<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 cursor-pointer hover:bg-black/90 transition shadow-lg">
+						<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
 							<div className="w-6 h-6 bg-white rounded-full"></div>
 							<div className="text-left leading-tight">
-								<span className="text-[10px] uppercase block">Get it on</span>
+								<span className="text-[10px] uppercase block opacity-70">Get it on</span>
 								<span className="text-lg font-bold">Google Play</span>
 							</div>
 						</div>
-						<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 cursor-pointer hover:bg-black/90 transition shadow-lg">
+						<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
 							<div className="w-6 h-6 bg-white rounded-full"></div>
 							<div className="text-left leading-tight">
-								<span className="text-[10px] uppercase block">Download on the</span>
+								<span className="text-[10px] uppercase block opacity-70">Download on the</span>
 								<span className="text-lg font-bold">App Store</span>
 							</div>
 						</div>
