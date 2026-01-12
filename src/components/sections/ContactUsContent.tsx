@@ -1,8 +1,14 @@
 import React from "react";
 import Image from "next/image";
-import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin } from "lucide-react";
+import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin, Music } from "lucide-react";
 
 const ContactUsContent = () => {
+	const socialLinks = [
+		{ Icon: Facebook, href: "#" },
+		{ Icon: Instagram, href: "https://www.instagram.com/surveyplus.ng?igsh=Mml3bG1vaXc1bWlk" },
+		{ Icon: Linkedin, href: "https://www.linkedin.com/company/getsurveyplus/" },
+		{ Icon: Music, href: "https://www.tiktok.com/@surveyplus_official?_r=1&_t=ZS-92wuq2Rbz7c" },
+	];
 	return (
 		<div className="bg-white min-h-screen">
 			{/* --- Contact Us Hero Header --- */}
@@ -106,22 +112,17 @@ const ContactUsContent = () => {
 								Follow Us
 							</h4>
 							<div className="flex justify-center lg:justify-start gap-4">
-								{[Facebook, Instagram, Linkedin].map((Icon, idx) => (
+								{socialLinks.map(({ Icon, href }, idx) => (
 									<a
 										key={idx}
-										href="#"
+										href={href}
+										target={href !== "#" ? "_blank" : undefined}
+										rel={href !== "#" ? "noopener noreferrer" : undefined}
 										className="w-12 h-12 rounded-xl bg-white border border-gray-100 shadow-md flex items-center justify-center text-[#32A800] hover:bg-[#32A800] hover:text-white transition-all"
 									>
 										<Icon size={24} />
 									</a>
 								))}
-								{/* Special handling for "X" (Twitter) logo if using standard icons */}
-								<a
-									href="#"
-									className="w-12 h-12 rounded-xl bg-white border border-gray-100 shadow-md flex items-center justify-center text-[#32A800] hover:bg-black hover:text-white font-black transition-all"
-								>
-									X
-								</a>
 							</div>
 						</div>
 					</div>
