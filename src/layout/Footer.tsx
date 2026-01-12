@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import Link from "next/link";
 import GoogleStore from "@/assets/images/GoogleStore.png";
 import AppleStore from "@/assets/images/AppleStore.png";
 import StoreButtons from "@/components/shared/StoreButtons";
@@ -33,29 +34,24 @@ const Footer = () => {
 						<h4 className="text-xl font-bold mb-6">Quick Links</h4>
 						<ul className="space-y-4 text-lg opacity-80">
 							<li>
-								<a href="#" className="hover:opacity-100 transition">
+								<Link href="/" className="hover:opacity-100 transition">
 									Home
-								</a>
+								</Link>
 							</li>
 							<li>
-								<a href="#" className="hover:opacity-100 transition">
+								<Link href="/about" className="hover:opacity-100 transition">
 									About Us
-								</a>
+								</Link>
 							</li>
 							<li>
-								<a href="#" className="hover:opacity-100 transition">
-									Overview
-								</a>
-							</li>
-							<li>
-								<a href="#" className="hover:opacity-100 transition">
+								<Link href="/blog" className="hover:opacity-100 transition">
 									Blog
-								</a>
+								</Link>
 							</li>
 							<li>
-								<a href="#" className="hover:opacity-100 transition">
+								<Link href="/contact" className="hover:opacity-100 transition">
 									Contact
-								</a>
+								</Link>
 							</li>
 						</ul>
 					</div>

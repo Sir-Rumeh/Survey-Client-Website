@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin, Music } from "lucide-react";
+import ContactUs from "@/assets/images/ContactUs.png";
 
 const ContactUsContent = () => {
 	const socialLinks = [
@@ -30,19 +31,7 @@ const ContactUsContent = () => {
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 					{/* --- Left Column: Illustration (3 Columns) --- */}
 					<div className="lg:col-span-3 flex justify-center lg:justify-start">
-						<div className="relative w-full max-w-[280px] aspect-square">
-							{/* Replace with your specific Contact Illustration SVG/PNG */}
-							<div className="w-full h-full bg-gray-50 rounded-full flex items-center justify-center border-2 border-dashed border-gray-200">
-								<div className="text-center p-4">
-									<div className="bg-[#32A800] w-12 h-12 rounded-lg mx-auto mb-4 flex items-center justify-center text-white font-bold text-xl">
-										@
-									</div>
-									<p className="text-xs text-gray-400 font-bold uppercase tracking-widest">
-										24h Support
-									</p>
-								</div>
-							</div>
-						</div>
+						<Image src={ContactUs} alt="ContactUs" className="" />
 					</div>
 
 					{/* --- Middle Column: Contact Form (5 Columns) --- */}
