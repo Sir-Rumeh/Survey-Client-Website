@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import Navbar from "@/components/sections/Navbar";
+import Navbar from "@/layout/Navbar";
 import Footer from "./Footer";
 
 type WebsiteLayoutProps = {

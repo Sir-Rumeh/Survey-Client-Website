@@ -74,19 +74,21 @@ const Footer = () => {
 					<div>
 						<h4 className="text-xl font-bold mb-6">Available on:</h4>
 						<div className="flex flex-col gap-4">
-							{/* Using stylized buttons to mimic store links */}
-							<div className="bg-black border border-gray-700 rounded-xl px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-gray-900 transition w-fit">
+							<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
 								<div className="w-6 h-6 bg-white rounded-full"></div>
-								<div className="text-[10px] leading-tight uppercase font-medium">
-									Get it on <br />
-									<span className="text-base font-bold normal-case">Google Play</span>
+								<div className="text-left leading-tight">
+									<span className="text-[10px] uppercase block opacity-70">Get it on</span>
+									<span className="text-lg font-bold">Google Play</span>
 								</div>
 							</div>
-							<div className="bg-black border border-gray-700 rounded-xl px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-gray-900 transition w-fit">
+
+							<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
 								<div className="w-6 h-6 bg-white rounded-full"></div>
-								<div className="text-[10px] leading-tight uppercase font-medium">
-									Download on the <br />
-									<span className="text-base font-bold normal-case">App Store</span>
+								<div className="text-left leading-tight">
+									<span className="text-[10px] uppercase block opacity-70">
+										Download on the
+									</span>
+									<span className="text-lg font-bold">App Store</span>
 								</div>
 							</div>
 						</div>
