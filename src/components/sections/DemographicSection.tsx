@@ -1,5 +1,10 @@
 import React from "react";
 import Image from "next/image";
+import Gongoni from "@/assets/images/Gongoni.png";
+import CornerBlock from "@/assets/images/CornerBlock.png";
+import GetBundi from "@/assets/images/GetBundi.png";
+import NPC from "@/assets/images/NPC.png";
+import BopInc from "@/assets/images/BopInc.png";
 
 const demographicFields = [
 	"Adult Population Weight",
@@ -60,20 +65,20 @@ const DemographicSection = () => {
 					<h4 className="text-2xl font-bold text-gray-900 mb-12">Trusted by:</h4>
 					<div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 grayscale opacity-80 hover:grayscale-0 transition-all">
 						{/* Replace with your actual logo images */}
-						<div className="h-12 w-40 relative">
-							<div className="font-black text-gray-400 text-xl italic">GONGONI COMPANY LTD.</div>
+						<div className="h-12 w-40 relative flex items-center">
+							<Image src={Gongoni} alt="Gongoni" width={600} height={800} />
 						</div>
-						<div className="h-12 w-12 bg-orange-500 rounded flex items-center justify-center text-white font-bold">
-							GB
+						<div className="h-12 w-40 bg-orange-500 rounded flex items-center justify-center text-white font-bold">
+							<Image src={CornerBlock} alt="CornerBlock" width={600} height={800} />
 						</div>
-						<div className="h-12 w-32 relative">
-							<div className="font-bold text-gray-800 text-lg">GetBundi</div>
+						<div className="h-12 w-40 relative flex items-center">
+							<Image src={GetBundi} alt="GetBundi" width={600} height={800} />
 						</div>
-						<div className="h-16 w-16 bg-green-100 rounded-full flex items-center justify-center border-2 border-green-700">
-							<span className="text-[10px] text-green-800 font-bold">LOGO</span>
+						<div className="h-16 w-40 bg-green-100 rounded-full flex items-center justify-center border-2 border-green-700">
+							<Image src={NPC} alt="NPC" width={600} height={800} />
 						</div>
-						<div className="h-12 w-12 bg-yellow-400 flex items-center justify-center">
-							<span className="text-[10px] text-black font-black">bop inc</span>
+						<div className="h-12 w-40 bg-yellow-400 flex items-center justify-center">
+							<Image src={BopInc} alt="BopInc" width={600} height={800} />
 						</div>
 					</div>
 				</div>

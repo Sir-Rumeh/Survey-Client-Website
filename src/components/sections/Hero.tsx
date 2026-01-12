@@ -8,7 +8,7 @@ const Hero = () => {
 	const respondentsAppUrl = process.env.NEXT_PUBLIC_APP_RESPONDENTS_BASE_URL || "";
 	const sponsorsAppUrl = process.env.NEXT_PUBLIC_APP_SPONSORS_BASE_URL || "";
 	return (
-		<section className="pt-28 pb-0 px-4 flex flex-col items-center text-center">
+		<section className="mt-6 pt-28 pb-0 px-4 flex flex-col items-center text-center min-h-screen">
 			<h1 className="text-5xl md:text-7xl font-extrabold text-green-700 leading-tight">
 				Data and Insights <br /> Delivered.
 			</h1>
@@ -47,7 +47,7 @@ const Hero = () => {
 
 				{/* Center Phones - Visualized with placeholder colors for layout */}
 				<div className="flex items-end gap-[-20px] md:gap-4 relative z-10">
-					<Image src={Iphone13Pro} alt="iPhone 13 Pro Mockup" width={600} height={800} />
+					<Image src={Iphone13Pro} alt="iPhone 13 Pro Mockup" width={600} className="" />
 				</div>
 
 				{/* Decorative Badge Right */}

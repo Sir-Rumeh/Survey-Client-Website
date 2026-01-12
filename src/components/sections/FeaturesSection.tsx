@@ -1,8 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
+import FeaturesPhones from "@/assets/images/FeaturesPhones.png";
 
 const FeaturesSection = () => {
+	const sponsorsAppUrl = process.env.NEXT_PUBLIC_APP_SPONSORS_BASE_URL || "";
 	return (
 		<section className="bg-white py-16 px-4 md:px-8">
 			<div className="max-w-7xl mx-auto">
@@ -28,18 +30,20 @@ const FeaturesSection = () => {
 						<span className="text-[#32A800] font-bold text-xl mb-1">Available on:</span>
 						<div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
 							{/* Using placeholder divs to mimic buttons - replace with <Image /> for real logos */}
-							<div className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-gray-900 transition min-w-[140px]">
-								<div className="w-5 h-5 bg-white rounded-full"></div>
-								<div className="text-[10px] leading-tight text-left">
-									GET IT ON <br />
-									<span className="text-sm font-bold">Google Play</span>
+							<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
+								<div className="w-6 h-6 bg-white rounded-full"></div>
+								<div className="text-left leading-tight">
+									<span className="text-[8px] uppercase block opacity-70">Get it on</span>
+									<span className="text-md font-bold">Google Play</span>
 								</div>
 							</div>
-							<div className="bg-black text-white px-4 py-2 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-gray-900 transition min-w-[140px]">
-								<div className="w-5 h-5 bg-white rounded-full"></div>
-								<div className="text-[10px] leading-tight text-left">
-									Download on the <br />
-									<span className="text-sm font-bold">App Store</span>
+							<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
+								<div className="w-6 h-6 bg-white rounded-full"></div>
+								<div className="text-left leading-tight">
+									<span className="text-[8px] uppercase block opacity-70">
+										Download on the
+									</span>
+									<span className="text-md font-bold">App Store</span>
 								</div>
 							</div>
 						</div>
@@ -60,37 +64,8 @@ const FeaturesSection = () => {
 
 				{/* --- Features Grid --- */}
 				<div className="grid lg:grid-cols-2 gap-16 items-center">
-					{/* Left Side: Overlapping Mockups */}
-					<div className="relative h-[450px] md:h-[600px] flex justify-center items-center">
-						{/* Back Phone */}
-						<div className="absolute left-4 md:left-10 top-0 w-56 md:w-72 h-[480px] md:h-[550px] bg-slate-900 rounded-[3rem] border-[10px] border-slate-900 shadow-2xl rotate-[-12deg] z-0 overflow-hidden">
-							<div className="w-full h-full bg-white p-4">
-								<div className="h-4 w-24 bg-gray-100 rounded mb-6"></div>
-								<div className="space-y-4">
-									<div className="h-32 w-full bg-gray-50 rounded-xl border border-gray-100"></div>
-									<div className="h-8 w-full bg-gray-50 rounded"></div>
-									<div className="h-10 w-full bg-[#94004F]/10 rounded"></div>
-								</div>
-							</div>
-						</div>
-
-						{/* Front Phone */}
-						<div className="absolute left-28 md:left-36 top-16 w-56 md:w-72 h-[480px] md:h-[550px] bg-slate-900 rounded-[3rem] border-[10px] border-slate-900 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] rotate-[6deg] z-10 overflow-hidden">
-							<div className="w-full h-full bg-white p-4 flex flex-col">
-								<div className="h-2 w-16 bg-gray-200 rounded-full mx-auto mb-6"></div>
-								<div className="h-6 w-3/4 bg-gray-100 rounded mb-4"></div>
-								<div className="space-y-3">
-									<div className="h-40 w-full bg-gray-50 rounded-xl border border-gray-100"></div>
-									<div className="h-10 w-full bg-[#94004F] rounded-lg"></div>
-								</div>
-								<div className="mt-auto flex justify-between p-2 border-t border-gray-100">
-									{[1, 2, 3].map((i) => (
-										<div key={i} className="w-5 h-5 rounded-full bg-gray-100" />
-									))}
-								</div>
-							</div>
-						</div>
-					</div>
+					{/* Left Side: Image */}
+					<Image src={FeaturesPhones} alt="FeaturesPhones" width={600} height={800} />
 
 					{/* Right Side: Info Card */}
 					<div className="bg-gray-50 rounded-[3rem] p-8 md:p-14 border border-gray-100">
@@ -116,7 +91,10 @@ const FeaturesSection = () => {
 							))}
 						</ul>
 
-						<button className="bg-[#94004F] text-white px-12 py-5 rounded-2xl text-xl font-bold hover:bg-[#7a0041] active:scale-95 transition-all shadow-lg">
+						<button
+							onClick={() => window.open(sponsorsAppUrl, "_blank")}
+							className="bg-[#94004F] text-white px-12 py-5 rounded-2xl text-xl font-bold hover:bg-[#7a0041] active:scale-95 transition-all shadow-lg"
+						>
 							Conduct Survey
 						</button>
 					</div>

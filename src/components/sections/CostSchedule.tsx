@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import CostScheduleImg from "@/assets/images/CostSchedule.png";
+import Image from "next/image";
 
 const pricingData = [
 	{ range: "1 - 5 Questions", price: "N500 per respondent" },
@@ -29,12 +31,7 @@ const CostSchedule = () => {
 
 					{/* Illustration Area */}
 					<div className="lg:w-1/2 flex justify-center">
-						<div className="relative w-full max-w-md h-64 md:h-80">
-							{/* Replace with your actual SVG or Image illustration */}
-							<div className="absolute inset-0 bg-[#F3F4F6] rounded-3xl flex items-center justify-center italic text-gray-400 border-2 border-dashed border-gray-200">
-								[Pricing Illustration - Money/Character]
-							</div>
-						</div>
+						<Image src={CostScheduleImg} alt="CostScheduleImg" />
 					</div>
 				</div>
 
