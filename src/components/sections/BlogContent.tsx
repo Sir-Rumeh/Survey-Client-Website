@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { Search } from "lucide-react";
 import { useRouter } from "next/router";
+import StoreButtons from "../shared/StoreButtons";
 
 const BlogContent = () => {
 	const router = useRouter();
@@ -174,25 +175,12 @@ const BlogContent = () => {
 				</div>
 
 				{/* --- Full Width CTA --- */}
-				<div className="mt-20 bg-[#94004F] rounded-[2rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
-					<h3 className="text-2xl md:text-3xl font-extrabold text-white text-center md:text-left">
+				<div className="mt-20 bg-[#94004F] rounded-[2rem] px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+					<h3 className="text-2xl md:text-3xl font-extrabold text-white text-center md:text-left w-[70%]">
 						Download Mobile App Today
 					</h3>
-					<div className="flex flex-wrap justify-center gap-4">
-						<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
-							<div className="w-6 h-6 bg-white rounded-full"></div>
-							<div className="text-left leading-tight">
-								<span className="text-[10px] uppercase block opacity-70">Get it on</span>
-								<span className="text-lg font-bold">Google Play</span>
-							</div>
-						</div>
-						<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
-							<div className="w-6 h-6 bg-white rounded-full"></div>
-							<div className="text-left leading-tight">
-								<span className="text-[10px] uppercase block opacity-70">Download on the</span>
-								<span className="text-lg font-bold">App Store</span>
-							</div>
-						</div>
+					<div className="scale-50">
+						<StoreButtons />
 					</div>
 				</div>
 			</div>

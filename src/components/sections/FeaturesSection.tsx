@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
 import FeaturesPhones from "@/assets/images/FeaturesPhones.png";
+import StoreButtons from "../shared/StoreButtons";
 
 const FeaturesSection = () => {
 	const sponsorsAppUrl = process.env.NEXT_PUBLIC_APP_SPONSORS_BASE_URL || "";
@@ -29,23 +30,7 @@ const FeaturesSection = () => {
 					<div className="bg-[#E2F9D0] rounded-3xl p-8 flex flex-col items-center justify-center gap-4">
 						<span className="text-[#32A800] font-bold text-xl mb-1">Available on:</span>
 						<div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
-							{/* Using placeholder divs to mimic buttons - replace with <Image /> for real logos */}
-							<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
-								<div className="w-6 h-6 bg-white rounded-full"></div>
-								<div className="text-left leading-tight">
-									<span className="text-[8px] uppercase block opacity-70">Get it on</span>
-									<span className="text-md font-bold">Google Play</span>
-								</div>
-							</div>
-							<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
-								<div className="w-6 h-6 bg-white rounded-full"></div>
-								<div className="text-left leading-tight">
-									<span className="text-[8px] uppercase block opacity-70">
-										Download on the
-									</span>
-									<span className="text-md font-bold">App Store</span>
-								</div>
-							</div>
+							<StoreButtons />
 						</div>
 					</div>
 				</div>

@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Search, Send } from "lucide-react";
+import StoreButtons from "../shared/StoreButtons";
 
 const BlogDetailsContent = () => {
 	const otherPosts = [1, 2, 3, 4];
@@ -194,23 +195,12 @@ const BlogDetailsContent = () => {
 				</div>
 
 				{/* --- Global Download CTA --- */}
-				<div className="mt-24 bg-[#94004F] rounded-[2.5rem] p-8 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
-					<h3 className="text-3xl md:text-4xl font-extrabold text-white">Download Mobile App Today</h3>
-					<div className="flex flex-wrap gap-4 justify-center">
-						<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
-							<div className="w-6 h-6 bg-white rounded-full"></div>
-							<div className="text-left leading-tight">
-								<span className="text-[10px] uppercase block opacity-70">Get it on</span>
-								<span className="text-lg font-bold">Google Play</span>
-							</div>
-						</div>
-						<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
-							<div className="w-6 h-6 bg-white rounded-full"></div>
-							<div className="text-left leading-tight">
-								<span className="text-[10px] uppercase block opacity-70">Download on the</span>
-								<span className="text-lg font-bold">App Store</span>
-							</div>
-						</div>
+				<div className="mt-20 bg-[#94004F] rounded-[2rem] px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+					<h3 className="text-2xl md:text-3xl font-extrabold text-white text-center md:text-left w-[70%]">
+						Download Mobile App Today
+					</h3>
+					<div className="scale-50">
+						<StoreButtons />
 					</div>
 				</div>
 			</div>

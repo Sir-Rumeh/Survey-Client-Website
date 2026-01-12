@@ -1,6 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import GoogleStore from "@/assets/images/GoogleStore.png";
+import AppleStore from "@/assets/images/AppleStore.png";
+import StoreButtons from "@/components/shared/StoreButtons";
 
 const Footer = () => {
 	const currentYear = new Date().getFullYear();
@@ -74,23 +77,7 @@ const Footer = () => {
 					<div>
 						<h4 className="text-xl font-bold mb-6">Available on:</h4>
 						<div className="flex flex-col gap-4">
-							<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
-								<div className="w-6 h-6 bg-white rounded-full"></div>
-								<div className="text-left leading-tight">
-									<span className="text-[10px] uppercase block opacity-70">Get it on</span>
-									<span className="text-lg font-bold">Google Play</span>
-								</div>
-							</div>
-
-							<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
-								<div className="w-6 h-6 bg-white rounded-full"></div>
-								<div className="text-left leading-tight">
-									<span className="text-[10px] uppercase block opacity-70">
-										Download on the
-									</span>
-									<span className="text-lg font-bold">App Store</span>
-								</div>
-							</div>
+							<StoreButtons />
 						</div>
 					</div>
 				</div>

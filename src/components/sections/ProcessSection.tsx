@@ -1,5 +1,6 @@
 import React from "react";
 import { DownloadCloud, UserPlus, Rocket } from "lucide-react";
+import StoreButtons from "../shared/StoreButtons";
 
 const ProcessSection = () => {
 	const steps = [
@@ -58,22 +59,7 @@ const ProcessSection = () => {
 							{/* Conditional Store Buttons for Step 1 */}
 							{step.hasStores && (
 								<div className="mt-8 flex flex-col gap-3 w-full">
-									<div className="bg-black text-white px-5 py-2.5 rounded-xl flex items-center gap-3 cursor-pointer hover:bg-gray-900 transition mx-auto w-48">
-										<div className="w-5 h-5 bg-white rounded-full"></div>
-										<div className="text-left leading-tight">
-											<span className="text-[8px] uppercase block">Get it on</span>
-											<span className="text-sm font-bold">Google Play</span>
-										</div>
-									</div>
-									<div className="bg-black text-white px-5 py-2.5 rounded-xl flex items-center gap-3 cursor-pointer hover:bg-gray-900 transition mx-auto w-48">
-										<div className="w-5 h-5 bg-white rounded-full"></div>
-										<div className="text-left leading-tight">
-											<span className="text-[8px] uppercase block">
-												Download on the
-											</span>
-											<span className="text-sm font-bold">App Store</span>
-										</div>
-									</div>
+									<StoreButtons />
 								</div>
 							)}
 						</div>

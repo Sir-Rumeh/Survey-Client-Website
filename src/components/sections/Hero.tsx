@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import PaidIcon from "@/assets/svgs/PaidIconSVG";
 import Iphone13Pro from "@/assets/images/Iphone13Pro.png";
-import PersonOne from "@/assets/svgs/PersonOne";
 
 const Hero = () => {
 	const respondentsAppUrl = process.env.NEXT_PUBLIC_APP_RESPONDENTS_BASE_URL || "";

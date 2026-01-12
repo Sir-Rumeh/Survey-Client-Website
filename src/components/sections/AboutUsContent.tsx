@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
+import StoreButtons from "../shared/StoreButtons";
 
 const AboutUsContent = () => {
 	return (
@@ -75,25 +76,12 @@ const AboutUsContent = () => {
 				</div>
 
 				{/* --- Download App Today CTA --- */}
-				<div className="bg-[#32A800] rounded-[2rem] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
-					<h3 className="text-3xl md:text-4xl font-extrabold text-white text-center md:text-left">
+				<div className="relative bg-[#32A800] w-full rounded-[2rem] flex flex-col md:flex-row items-center md:justify-end shadow-xl gap-8 px-6 md:px-10">
+					<h3 className="text-3xl md:text-4xl font-extrabold text-white text-center md:text-left w-[70%]">
 						Download Mobile App Today
 					</h3>
-					<div className="flex flex-wrap justify-center gap-4">
-						<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
-							<div className="w-6 h-6 bg-white rounded-full"></div>
-							<div className="text-left leading-tight">
-								<span className="text-[10px] uppercase block opacity-70">Get it on</span>
-								<span className="text-lg font-bold">Google Play</span>
-							</div>
-						</div>
-						<div className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-3 shadow-lg cursor-pointer hover:scale-105 transition-transform">
-							<div className="w-6 h-6 bg-white rounded-full"></div>
-							<div className="text-left leading-tight">
-								<span className="text-[10px] uppercase block opacity-70">Download on the</span>
-								<span className="text-lg font-bold">App Store</span>
-							</div>
-						</div>
+					<div className="scale-50">
+						<StoreButtons />
 					</div>
 				</div>
 
