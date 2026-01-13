@@ -2,6 +2,8 @@ import React from "react";
 import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
 import StoreButtons from "../shared/StoreButtons";
+import MacBookAir from "@/assets/images/MacBookAir.png";
+import Iphone15Pro from "@/assets/images/Iphone15Pro.png";
 
 const AboutUsContent = () => {
 	return (
@@ -22,21 +24,7 @@ const AboutUsContent = () => {
 				<div className="flex flex-col lg:flex-row items-center gap-16">
 					<div className="lg:w-1/2 flex justify-center">
 						{/* Laptop Mockup */}
-						<div className="relative w-full max-w-md aspect-[4/3] drop-shadow-2xl">
-							<div className="bg-slate-800 rounded-xl p-2 border-4 border-slate-700">
-								<div className="bg-white rounded-lg h-64 overflow-hidden">
-									<div className="bg-[#32A800] h-4 w-full" />
-									<div className="p-4 space-y-2">
-										<div className="h-4 w-1/2 bg-gray-100 rounded" />
-										<div className="grid grid-cols-2 gap-2">
-											<div className="h-20 bg-gray-50 rounded border border-gray-100" />
-											<div className="h-20 bg-gray-50 rounded border border-gray-100" />
-										</div>
-									</div>
-								</div>
-							</div>
-							<div className="h-4 w-full bg-slate-700 mt-1 rounded-b-xl shadow-lg" />
-						</div>
+						<Image src={MacBookAir} alt="MacBookAir" />
 					</div>
 
 					<div className="lg:w-1/2 space-y-6">
@@ -100,22 +88,7 @@ const AboutUsContent = () => {
 					</div>
 
 					<div className="lg:w-1/2 order-1 lg:order-2 flex justify-center">
-						{/* Phone Mockups */}
-						<div className="relative w-full max-w-sm h-[400px] flex items-center justify-center">
-							<div className="absolute left-0 w-48 h-80 bg-slate-900 rounded-[2rem] border-4 border-slate-900 rotate-[-15deg] shadow-xl overflow-hidden z-0 translate-y-4">
-								<div className="bg-white h-full w-full p-2">
-									<div className="h-4 w-20 bg-gray-100 rounded mb-4" />
-									<div className="h-40 bg-[#94004F]/10 rounded-lg" />
-								</div>
-							</div>
-							<div className="relative w-48 h-80 bg-slate-900 rounded-[2rem] border-4 border-slate-900 shadow-2xl overflow-hidden z-10 translate-x-8">
-								<div className="bg-white h-full w-full p-2">
-									<div className="h-6 w-full bg-[#32A800] rounded mb-4" />
-									<div className="h-32 bg-gray-50 rounded-lg" />
-									<div className="mt-4 h-10 w-full bg-gray-100 rounded" />
-								</div>
-							</div>
-						</div>
+						<Image src={Iphone15Pro} alt="Iphone15Pro" />
 					</div>
 				</div>
 			</div>
