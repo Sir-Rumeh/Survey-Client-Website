@@ -2,6 +2,9 @@ import React from "react";
 import Image from "next/image";
 import { MapPin, Phone, Mail, Facebook, Instagram, Linkedin, Music } from "lucide-react";
 import ContactUs from "@/assets/images/ContactUs.png";
+import emailjs from "@emailjs/browser";
+import toast from "react-hot-toast";
+import { emConfig } from "@/lib/utils";
 
 const ContactUsContent = () => {
 	const socialLinks = [
@@ -10,6 +13,39 @@ const ContactUsContent = () => {
 		{ Icon: Linkedin, href: "https://www.linkedin.com/company/getsurveyplus/" },
 		{ Icon: Music, href: "https://www.tiktok.com/@surveyplus_official?_r=1&_t=ZS-92wuq2Rbz7c" },
 	];
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const form = e.currentTarget;
+		const formData = new FormData(form);
+		const name = (formData.get("name") as string) || "";
+		const email = (formData.get("email") as string) || "";
+		const message = (formData.get("message") as string) || "";
+
+		if (!name.trim() || !email.trim() || !message.trim()) {
+			toast.error("Please fill in all fields");
+			return;
+		}
+
+		const emailRegex = /^\S+@\S+\.\S+$/;
+		if (!emailRegex.test(email)) {
+			toast.error("Please enter a valid email address");
+			return;
+		}
+
+		emailjs.sendForm(emConfig.serviceID, emConfig.templateID, form, emConfig.publicID).then(
+			(result) => {
+				console.log(result.text);
+				toast.success("Message sent successfully!");
+				form.reset();
+			},
+			(error) => {
+				console.log(error.text);
+				toast.error("Failed to send message.");
+			}
+		);
+	};
+
 	return (
 		<div className="bg-white min-h-screen">
 			{/* --- Contact Us Hero Header --- */}
@@ -36,26 +72,38 @@ const ContactUsContent = () => {
 
 					{/* --- Middle Column: Contact Form (5 Columns) --- */}
 					<div className="lg:col-span-5 bg-white border-2 border-[#32A800]/20 rounded-[2rem] p-8 md:p-10 shadow-sm">
-						<form className="space-y-6">
+						<form noValidate onSubmit={handleSubmit} className="space-y-6">
 							<div className="space-y-2">
-								<label className="text-xl font-extrabold text-gray-900">Name</label>
+								<label htmlFor="name" className="text-xl font-extrabold text-gray-900">
+									Name
+								</label>
 								<input
+									id="name"
+									name="name"
 									type="text"
 									placeholder="Enter your name"
 									className="w-full bg-gray-100 p-4 rounded-xl focus:ring-2 focus:ring-[#32A800] outline-none border-none transition-all placeholder:text-gray-400"
 								/>
 							</div>
 							<div className="space-y-2">
-								<label className="text-xl font-extrabold text-gray-900">Email</label>
+								<label htmlFor="email" className="text-xl font-extrabold text-gray-900">
+									Email
+								</label>
 								<input
+									id="email"
+									name="email"
 									type="email"
 									placeholder="Enter your email"
 									className="w-full bg-gray-100 p-4 rounded-xl focus:ring-2 focus:ring-[#32A800] outline-none border-none transition-all placeholder:text-gray-400"
 								/>
 							</div>
 							<div className="space-y-2">
-								<label className="text-xl font-extrabold text-gray-900">Message</label>
+								<label htmlFor="message" className="text-xl font-extrabold text-gray-900">
+									Message
+								</label>
 								<textarea
+									id="message"
+									name="message"
 									placeholder="Message here"
 									className="w-full bg-gray-100 p-4 rounded-xl h-48 focus:ring-2 focus:ring-[#32A800] outline-none border-none transition-all placeholder:text-gray-400 resize-none"
 								/>
