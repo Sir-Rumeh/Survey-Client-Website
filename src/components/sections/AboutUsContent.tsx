@@ -4,15 +4,16 @@ import { CheckCircle2 } from "lucide-react";
 import StoreButtons from "../shared/StoreButtons";
 import MacBookAir from "@/assets/images/MacBookAir.png";
 import Iphone15Pro from "@/assets/images/Iphone15Pro.png";
+import AboutUsImg from "@/assets/images/AboutUsImg.png";
 
 const AboutUsContent = () => {
 	return (
 		<div className="bg-white min-h-screen">
 			{/* --- Hero / Header Section --- */}
-			<div className="relative h-[300px] w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+			<div className="relative h-[400px] w-full bg-slate-900 overflow-hidden flex items-center justify-center rounded-br-3xl rounded-bl-3xl">
 				{/* Background Image with Overlay */}
 				<div className="absolute inset-0 opacity-40">
-					<Image src="/about-hero-bg.jpg" alt="Hero Background" fill className="object-cover" />
+					<Image src={AboutUsImg} alt="About Us Background" fill className="object-cover" />
 				</div>
 				<h1 className="relative z-10 text-white text-5xl md:text-7xl font-extrabold tracking-tight">
 					About Us

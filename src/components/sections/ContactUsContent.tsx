@@ -5,6 +5,7 @@ import ContactUs from "@/assets/images/ContactUs.png";
 import emailjs from "@emailjs/browser";
 import toast from "react-hot-toast";
 import { emConfig } from "@/lib/utils";
+import ContactUsImg from "@/assets/images/ContactUsImg.png";
 
 const ContactUsContent = () => {
 	const socialLinks = [
@@ -49,17 +50,13 @@ const ContactUsContent = () => {
 	return (
 		<div className="bg-white min-h-screen">
 			{/* --- Contact Us Hero Header --- */}
-			<div className="relative h-[250px] md:h-[300px] w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+			<div className="relative h-[400px] w-full bg-slate-900 overflow-hidden flex items-center justify-center rounded-br-3xl rounded-bl-3xl">
+				{/* Background Image with Overlay */}
 				<div className="absolute inset-0 opacity-40">
-					<Image
-						src="/contact-hero-bg.jpg" // Replace with actual background image
-						alt="Contact Background"
-						fill
-						className="object-cover"
-					/>
+					<Image src={ContactUsImg} alt="Contcat Us Background" fill className="object-cover" />
 				</div>
 				<h1 className="relative z-10 text-white text-5xl md:text-7xl font-extrabold tracking-tight">
-					Contact us
+					Contact Us
 				</h1>
 			</div>
 

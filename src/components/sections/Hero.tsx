@@ -46,7 +46,7 @@ const Hero = () => {
 
 				{/* Center Phones - Visualized with placeholder colors for layout */}
 				<div className="flex items-end gap-[-20px] md:gap-4 relative z-10">
-					<Image src={Iphone13Pro} alt="iPhone 13 Pro Mockup" className="" />
+					<Image src={Iphone13Pro} alt="iPhone 13 Pro Mockup" className="w-[680px]" />
 				</div>
 
 				{/* Decorative Badge Right */}

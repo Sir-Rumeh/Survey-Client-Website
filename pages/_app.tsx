@@ -7,8 +7,8 @@ import { Toaster } from "react-hot-toast";
 export default function App({ Component, pageProps }: AppProps) {
 	// Ensure dark class is synced with user preference (simple client side init)
 	useEffect(() => {
-		const stored = localStorage.getItem("theme");
-		if (stored === "dark") document.documentElement.classList.add("dark");
+		// const stored = localStorage.getItem("theme");
+		// if (stored === "dark") document.documentElement.classList.add("dark");
 	}, []);
 
 	return (

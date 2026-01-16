@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Search } from "lucide-react";
 import { useRouter } from "next/router";
 import StoreButtons from "../shared/StoreButtons";
+import BlogImg from "@/assets/images/BlogImg.png";
 
 const BlogContent = () => {
 	const router = useRouter();
@@ -12,16 +13,14 @@ const BlogContent = () => {
 	return (
 		<div className="bg-white min-h-screen">
 			{/* --- Blog Hero Header --- */}
-			<div className="relative h-[250px] w-full bg-slate-900 overflow-hidden flex items-center justify-center">
+			<div className="relative h-[400px] w-full bg-slate-900 overflow-hidden flex items-center justify-center rounded-br-3xl rounded-bl-3xl">
+				{/* Background Image with Overlay */}
 				<div className="absolute inset-0 opacity-40">
-					<Image
-						src="/blog-hero-bg.jpg" // Replace with actual background image
-						alt="Blog Background"
-						fill
-						className="object-cover"
-					/>
+					<Image src={BlogImg} alt="Blog Background" fill className="object-cover" />
 				</div>
-				<h1 className="relative z-10 text-white text-6xl font-extrabold tracking-tight">Blog</h1>
+				<h1 className="relative z-10 text-white text-5xl md:text-7xl font-extrabold tracking-tight">
+					Blog
+				</h1>
 			</div>
 
 			<div className="max-w-7xl mx-auto px-6 py-16">
