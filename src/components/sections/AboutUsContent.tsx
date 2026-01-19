@@ -3,7 +3,7 @@ import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
 import StoreButtons from "../shared/StoreButtons";
 import MacBookAir from "@/assets/images/MacBookAir.png";
-import Iphone15Pro from "@/assets/images/Iphone15Pro.png";
+import Iphone15Pro from "@/assets/images/IPhone15Pro.png";
 import AboutUsImg from "@/assets/images/AboutUsImg.png";
 
 const AboutUsContent = () => {
