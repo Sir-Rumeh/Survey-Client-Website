@@ -1,12 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { Search } from "lucide-react";
 import { useRouter } from "next/router";
 import StoreButtons from "../shared/StoreButtons";
+import { getRecentBlogPosts } from "@/config/blog-actions";
 import BlogImg from "@/assets/images/BlogImg.png";
 
 const BlogContent = () => {
 	const router = useRouter();
+
+	useEffect(() => {
+		(async () => {
+			try {
+				const blogFormData = new FormData();
+				blogFormData.append("numOfBlogs", "4");
+				const data = {
+					numOfBlogs: 4,
+				};
+				const res = await getRecentBlogPosts(data);
+				console.log("getRecentBlogPosts result:", res);
+			} catch (err) {
+				console.error("Error fetching blog posts:", err);
+			}
+		})();
+	}, []);
 	const otherPosts = [1, 2, 3, 4];
 	const popularPosts = [1, 2, 3];
 
@@ -82,9 +99,12 @@ const BlogContent = () => {
 												Imagine sending someone a message and only receiving a "seen
 												at" notification...
 											</p>
-											<span className="text-[#94004F] text-xs font-bold cursor-pointer">
+											<button
+												onClick={() => router.push("/blog-details")}
+												className="text-[#94004F] text-xs font-bold cursor-pointer"
+											>
 												Read more
-											</span>
+											</button>
 										</div>
 									</div>
 								))}
