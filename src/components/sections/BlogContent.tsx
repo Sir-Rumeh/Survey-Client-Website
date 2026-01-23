@@ -1,31 +1,42 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Search } from "lucide-react";
 import { useRouter } from "next/router";
 import StoreButtons from "../shared/StoreButtons";
-import { getRecentBlogPosts } from "@/config/blog-actions";
+import { getRecentBlogPosts, getPopularBlogs, Blog } from "@/config/blog-actions";
 import BlogImg from "@/assets/images/BlogImg.png";
 
 const BlogContent = () => {
 	const router = useRouter();
 
+	const [posts, setPosts] = useState<Blog[]>([]);
+	const [popularPosts, setPopularPosts] = useState<Blog[]>([]);
+
+	const normalizeResponseToArray = (res: any): Blog[] => {
+		if (!res) return [];
+		if (Array.isArray(res)) return res as Blog[];
+		if (Array.isArray(res?.data)) return res.data as Blog[];
+		if (Array.isArray(res?.blogs)) return res.blogs as Blog[];
+		if (Array.isArray(res?.results)) return res.results as Blog[];
+		return [];
+	};
+
+	const getPostId = (p: Blog | any) => p?.blog_id ?? p?.id ?? p?.blogid ?? p?.blogId ?? p?._id ?? null;
+
 	useEffect(() => {
 		(async () => {
 			try {
-				const blogFormData = new FormData();
-				blogFormData.append("numOfBlogs", "4");
-				const data = {
-					numOfBlogs: 4,
-				};
-				const res = await getRecentBlogPosts(data);
-				console.log("getRecentBlogPosts result:", res);
+				const [recentRes, popularRes] = await Promise.all([
+					getRecentBlogPosts({ numOfBlogs: 6 }),
+					getPopularBlogs({ numOfBlogs: 3 }),
+				]);
+				setPosts(normalizeResponseToArray(recentRes));
+				setPopularPosts(normalizeResponseToArray(popularRes));
 			} catch (err) {
 				console.error("Error fetching blog posts:", err);
 			}
 		})();
 	}, []);
-	const otherPosts = [1, 2, 3, 4];
-	const popularPosts = [1, 2, 3];
 
 	return (
 		<div className="bg-white min-h-screen">
@@ -48,29 +59,68 @@ const BlogContent = () => {
 						<section>
 							<h2 className="text-3xl font-bold text-[#94004F] mb-8">Latest Post</h2>
 							<div className="space-y-6">
-								<div className="relative aspect-video rounded-[2rem] overflow-hidden shadow-lg">
-									<Image
-										src="/post-image.jpg" // Replace with post thumbnail
-										alt="Latest Post"
-										fill
-										className="object-cover"
-									/>
-								</div>
-								<h3 className="text-2xl md:text-3xl font-bold text-[#94004F]">
-									6 Best Ways To Increase Your Survey Response Rates
-								</h3>
-								<p className="text-gray-700 leading-relaxed text-lg">
-									Imagine sending someone a message and only receiving a "seen at"
-									notification with no reply. We've all been there, and it's somewhat
-									frustrating. The same can happen with your surveys if not properly
-									planned...{" "}
-									<button
-										onClick={() => router.push("/blog-details")}
-										className="text-[#94004F] font-bold cursor-pointer"
-									>
-										Read more
-									</button>
-								</p>
+								{posts[0] ? (
+									(() => {
+										const latest = posts[0];
+										const id = getPostId(latest);
+										const title = latest?.blog_title ?? "Latest Post";
+										const raw = latest?.blog_content ?? "";
+										const excerpt =
+											raw.replace(/<[^>]+>/g, "").slice(0, 280) +
+											(raw.length > 280 ? "..." : "");
+										const img = latest?.blog_pic
+											? latest.blog_pic.startsWith("http")
+												? latest.blog_pic
+												: `${process.env.NEXT_PUBLIC_SERVER_BASE_URL ?? ""}/${latest.blog_pic}`
+											: "/post-image.jpg";
+										return (
+											<>
+												<div className="relative aspect-video rounded-[2rem] overflow-hidden shadow-lg">
+													<Image
+														src={img}
+														alt={title}
+														fill
+														className="object-cover"
+													/>
+												</div>
+												<h3 className="text-2xl md:text-3xl font-bold text-[#94004F]">
+													{title}
+												</h3>
+												<p className="text-gray-700 leading-relaxed text-lg">
+													{excerpt}{" "}
+													<button
+														onClick={() =>
+															router.push({
+																pathname: "/blog-details",
+																query: { id },
+															})
+														}
+														className="text-[#94004F] font-bold cursor-pointer"
+													>
+														Read more
+													</button>
+												</p>
+											</>
+										);
+									})()
+								) : (
+									<div>
+										<div className="relative aspect-video rounded-[2rem] overflow-hidden shadow-lg">
+											<Image
+												src="/post-image.jpg"
+												alt="Latest Post"
+												fill
+												className="object-cover"
+											/>
+										</div>
+										<h3 className="text-2xl md:text-3xl font-bold text-[#94004F]">
+											6 Best Ways To Increase Your Survey Response Rates
+										</h3>
+										<p className="text-gray-700 leading-relaxed text-lg">
+											A curated selection of our latest insights.
+										</p>
+									</div>
+								)}
 							</div>
 						</section>
 
@@ -78,36 +128,56 @@ const BlogContent = () => {
 						<section>
 							<h2 className="text-3xl font-bold text-[#94004F] mb-8">Popular Posts</h2>
 							<div className="space-y-8">
-								{popularPosts.map((_, i) => (
-									<div
-										key={i}
-										className="flex flex-col md:flex-row gap-6 items-start bg-gray-50 p-6 rounded-[2rem]"
-									>
-										<div className="relative w-full md:w-48 h-32 flex-shrink-0 rounded-xl overflow-hidden">
-											<Image
-												src="/post-thumb.jpg"
-												alt="Thumb"
-												fill
-												className="object-cover"
-											/>
-										</div>
-										<div className="space-y-3">
-											<h4 className="text-xl font-bold text-[#94004F]">
-												6 Best Ways To Increase Your Survey Response Rates
-											</h4>
-											<p className="text-sm text-gray-600 line-clamp-2">
-												Imagine sending someone a message and only receiving a "seen
-												at" notification...
-											</p>
-											<button
-												onClick={() => router.push("/blog-details")}
-												className="text-[#94004F] text-xs font-bold cursor-pointer"
+								{popularPosts.length > 0 ? (
+									popularPosts.map((post, i) => {
+										const id = getPostId(post);
+										const title = post?.blog_title ?? "Untitled";
+										const excerpt = (post?.blog_content ?? "")
+											.replace(/<[^>]+>/g, "")
+											.slice(0, 140);
+										const img = post?.blog_pic
+											? post.blog_pic.startsWith("http")
+												? post.blog_pic
+												: `${process.env.NEXT_PUBLIC_SERVER_BASE_URL ?? ""}/${post.blog_pic}`
+											: "/post-thumb.jpg";
+										return (
+											<div
+												key={id ?? i}
+												className="flex flex-col md:flex-row gap-6 items-start bg-gray-50 p-6 rounded-[2rem]"
 											>
-												Read more
-											</button>
-										</div>
-									</div>
-								))}
+												<div className="relative w-full md:w-48 h-32 flex-shrink-0 rounded-xl overflow-hidden">
+													<Image
+														src={img}
+														alt={title}
+														fill
+														className="object-cover"
+													/>
+												</div>
+												<div className="space-y-3">
+													<h4 className="text-xl font-bold text-[#94004F]">
+														{title}
+													</h4>
+													<p className="text-sm text-gray-600 line-clamp-2">
+														{excerpt}
+													</p>
+													<button
+														onClick={() =>
+															router.push({
+																pathname: "/blog-details",
+																query: { id },
+															})
+														}
+														className="text-[#94004F] text-xs font-bold cursor-pointer"
+													>
+														Read more
+													</button>
+												</div>
+											</div>
+										);
+									})
+								) : (
+									<div className="text-sm text-gray-500">No popular posts available.</div>
+								)}
 							</div>
 						</section>
 					</div>
@@ -130,21 +200,36 @@ const BlogContent = () => {
 						<div>
 							<h2 className="text-2xl font-bold text-[#94004F] mb-6">Other Posts</h2>
 							<div className="space-y-4">
-								{otherPosts.map((_, i) => (
-									<div key={i} className="flex gap-4 items-center bg-gray-50 p-3 rounded-xl">
-										<div className="relative w-20 h-16 flex-shrink-0 rounded-lg overflow-hidden">
-											<Image
-												src="/post-thumb.jpg"
-												alt="Thumb"
-												fill
-												className="object-cover"
-											/>
+								{posts.slice(1, 5).map((post, i) => {
+									const id = getPostId(post);
+									const title = post?.blog_title ?? "Untitled";
+									const img = post?.blog_pic
+										? post.blog_pic.startsWith("http")
+											? post.blog_pic
+											: `${process.env.NEXT_PUBLIC_SERVER_BASE_URL ?? ""}/${post.blog_pic}`
+										: "/post-thumb.jpg";
+									return (
+										<div
+											key={id ?? i}
+											className="flex gap-4 items-center bg-gray-50 p-3 rounded-xl"
+										>
+											<div className="relative w-20 h-16 flex-shrink-0 rounded-lg overflow-hidden">
+												<Image
+													src={img}
+													alt={title}
+													fill
+													className="object-cover"
+												/>
+											</div>
+											<p className="text-sm font-bold text-[#94004F] leading-snug">
+												{title}
+											</p>
 										</div>
-										<p className="text-sm font-bold text-[#94004F] leading-snug">
-											6 Best Ways To Increase Your Survey...
-										</p>
-									</div>
-								))}
+									);
+								})}
+								{posts.length <= 1 && (
+									<div className="text-sm text-gray-500">No other posts available.</div>
+								)}
 							</div>
 						</div>
 
