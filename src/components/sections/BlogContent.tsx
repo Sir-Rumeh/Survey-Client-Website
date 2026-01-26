@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { Loader2, Search } from "lucide-react";
+import { Loader2, Search, Send } from "lucide-react";
 import { useRouter } from "next/router";
 import StoreButtons from "../shared/StoreButtons";
 import {
@@ -370,13 +370,9 @@ const BlogContent = () => {
 											className="bg-gray-50 p-6 rounded-xl space-y-4 mb-4"
 										>
 											<div className="flex items-center gap-3">
-												<Image
-													src={CommentorImg}
-													alt={"commentor_img"}
-													height={40}
-													width={40}
-													className="object-cover"
-												/>
+												<div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold uppercase">
+													{comment.blog_commentor_name?.substring(0, 2) || "AN"}
+												</div>
 												<div>
 													<p className="font-bold text-sm">
 														{comment.blog_commentor_name}
@@ -440,7 +436,13 @@ const BlogContent = () => {
 									disabled={postingComment}
 									className="bg-[#94004F] text-white w-full py-3 rounded-lg font-bold text-sm hover:brightness-110 disabled:bg-[#94004F]/70 transition-all active:scale-95 flex items-center justify-center gap-2"
 								>
-									{postingComment ? <Loader2 className="animate-spin" /> : <>Post Now</>}
+									{postingComment ? (
+										<Loader2 className="animate-spin" />
+									) : (
+										<span className="flex items-center justify-center gap-2">
+											Post Now <Send size={18} />
+										</span>
+									)}
 								</button>
 							</form>
 						</div>

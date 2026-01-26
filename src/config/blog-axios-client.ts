@@ -5,7 +5,6 @@ const AxiosClient = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_SERVER_BASE_URL,
 });
 
-// 1. Helper to handle storage safely
 const getStoredToken = () => {
 	if (typeof window !== "undefined") {
 		return window.sessionStorage.getItem("SURVEY_API_TOKEN");
@@ -22,13 +21,11 @@ const setStoredToken = (token: string, expiresIn?: number) => {
 	}
 };
 
-// 2. Separate login function to avoid circular dependencies
 const loginAndGetToken = async (): Promise<string | null> => {
 	const username = process.env.NEXT_PUBLIC_SURVEY_API_USERNAME ?? "";
 	const password = process.env.NEXT_PUBLIC_SURVEY_API_PASSWORD ?? "";
 
 	try {
-		// Use a clean axios instance for login to avoid interceptor loops
 		const resp = await axios.post(
 			"https://surveyapi.unlimitedresource.com.ng/auth/login",
 			{ username, password },
@@ -36,7 +33,6 @@ const loginAndGetToken = async (): Promise<string | null> => {
 		);
 
 		const { access_token, expires_in } = resp.data;
-		console.log("Login response:", resp.data);
 		if (access_token) {
 			setStoredToken(access_token, expires_in);
 			return access_token;
@@ -48,22 +44,18 @@ const loginAndGetToken = async (): Promise<string | null> => {
 	}
 };
 
-// 3. Request Interceptor
 AxiosClient.interceptors.request.use(
 	async (config) => {
 		if (typeof navigator !== "undefined" && !navigator.onLine) {
 			throw new Error("Please check your Internet Connection");
 		}
 
-		// Default Content-Type for POST if not set
 		if (config.method === "post" && !config.headers["Content-Type"]) {
 			config.headers["Content-Type"] = "application/x-www-form-urlencoded";
 		}
 
-		// Get token from storage
 		const token = getStoredToken();
 
-		// IMPORTANT: Only attach token if one isn't already set (prevents overwriting retries)
 		if (token && !config.headers.Authorization) {
 			config.headers.Authorization = `Bearer ${token}`;
 		}
@@ -73,14 +65,12 @@ AxiosClient.interceptors.request.use(
 	(error) => Promise.reject(error),
 );
 
-// 4. Response Interceptor
 AxiosClient.interceptors.response.use(
 	(response) => response.data,
 	async (error) => {
 		const originalRequest = error.config;
 		const status = error.response?.status;
 
-		// Logic for 401 Unauthorized - Retry once
 		if (status === 401) {
 			const newToken = await loginAndGetToken();
 
@@ -90,7 +80,6 @@ AxiosClient.interceptors.response.use(
 			}
 		}
 
-		// Standard Error Handling
 		const errorMessage = error.response?.data?.message || error.response?.data?.error || "Something went wrong";
 
 		if (status === 400 && error.response?.data?.errors) {
