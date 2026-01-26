@@ -8,11 +8,50 @@ import {
 	fetchCommentsByBlog,
 	postBlogComment,
 	getOtherBlogs,
-	searchBlogs, // Added import
+	searchBlogs,
 	Blog,
 	BlogComment,
 } from "@/config/blog-actions";
 import toast from "react-hot-toast";
+
+// --- Skeleton Component ---
+const BlogDetailsSkeleton = () => (
+	<div className="animate-pulse bg-white min-h-screen">
+		{/* Hero Skeleton */}
+		<div className="h-[400px] w-full bg-gray-200 rounded-br-3xl rounded-bl-3xl" />
+
+		<div className="max-w-7xl mx-auto px-6 py-16">
+			<div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+				{/* Main Content Skeleton */}
+				<div className="lg:col-span-8 space-y-8">
+					<div className="h-12 bg-gray-200 rounded-lg w-3/4 mb-4" />
+					<div className="space-y-4">
+						<div className="h-4 bg-gray-200 rounded w-full" />
+						<div className="h-4 bg-gray-200 rounded w-full" />
+						<div className="h-4 bg-gray-200 rounded w-5/6" />
+						<div className="h-4 bg-gray-200 rounded w-full" />
+						<div className="h-4 bg-gray-200 rounded w-4/5" />
+					</div>
+					<div className="h-[400px] bg-gray-50 rounded-[2.5rem] mt-20" />
+				</div>
+
+				{/* Sidebar Skeleton */}
+				<div className="lg:col-span-4 space-y-12">
+					<div className="h-14 bg-gray-100 rounded-xl w-full" />
+					<div className="space-y-6">
+						<div className="h-8 bg-gray-200 rounded w-1/2" />
+						{[1, 2, 3, 4].map((i) => (
+							<div key={i} className="flex gap-4 items-center">
+								<div className="w-24 h-20 bg-gray-200 rounded-xl flex-shrink-0" />
+								<div className="h-4 bg-gray-200 rounded w-full" />
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+);
 
 const BlogDetailsContent = () => {
 	const router = useRouter();
@@ -23,7 +62,7 @@ const BlogDetailsContent = () => {
 	const [comments, setComments] = useState<BlogComment[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [postingComment, setPostingComment] = useState(false);
-	const [searching, setSearching] = useState(false); // Added searching state
+	const [searching, setSearching] = useState(false);
 
 	const getPostId = (p: Blog | any) => p?.blog_id ?? p?.id ?? p?.blogid ?? p?.blogId ?? p?._id ?? null;
 
@@ -61,7 +100,6 @@ const BlogDetailsContent = () => {
 		fetchBlogData();
 	}, [id]);
 
-	// Added handleSearch function
 	const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
@@ -71,9 +109,7 @@ const BlogDetailsContent = () => {
 
 		setSearching(true);
 		try {
-			const results = await searchBlogs({ keyword });
-			// If searching from a details page, we redirect back to the main blog page
-			// with the search results state to maintain consistent UX
+			await searchBlogs({ keyword });
 			router.push({
 				pathname: "/blog",
 				query: { search: keyword },
@@ -125,18 +161,15 @@ const BlogDetailsContent = () => {
 		}
 	};
 
+	// Use Skeleton while initial data is loading
 	if (loading) {
-		return (
-			<div className="min-h-screen flex items-center justify-center">
-				<Loader2 className="animate-spin text-[#94004F]" size={40} />
-			</div>
-		);
+		return <BlogDetailsSkeleton />;
 	}
 
 	if (!blog) {
 		return (
 			<div className="min-h-screen flex items-center justify-center">
-				<p className="text-gray-500">Blog post not found.</p>
+				<p className="text-gray-500 font-medium">Blog post not found.</p>
 			</div>
 		);
 	}
@@ -209,7 +242,6 @@ const BlogDetailsContent = () => {
 
 					{/* --- Sidebar Area --- */}
 					<aside className="lg:col-span-4 space-y-12">
-						{/* Search Bar Implementation matching BlogContent style */}
 						<form onSubmit={handleSearch} className="relative flex items-center">
 							<input
 								name="keyword"
@@ -233,7 +265,7 @@ const BlogDetailsContent = () => {
 						{/* Other Posts */}
 						<div>
 							<h2 className="text-2xl font-bold text-[#94004F] mb-6">Other Posts</h2>
-							<div className="space-y-4 max-h-[500px] overflow-y-auto">
+							<div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
 								{otherPosts.map((post, i) => {
 									const pId = getPostId(post);
 									const pTitle = post.blog_title || "";
@@ -276,7 +308,7 @@ const BlogDetailsContent = () => {
 						{/* Comments List */}
 						<div>
 							<h2 className="text-2xl font-bold text-[#94004F] mb-6">Comment</h2>
-							<div className="space-y-4 max-h-[500px] overflow-y-auto">
+							<div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
 								{comments.length > 0 ? (
 									comments.map((comment, i) => {
 										const formattedDate = comment.added_time
