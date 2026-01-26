@@ -1,16 +1,29 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { useRouter } from "next/router";
 import StoreButtons from "../shared/StoreButtons";
-import { getRecentBlogPosts, getPopularBlogs, Blog } from "@/config/blog-actions";
+import {
+	getRecentBlogPosts,
+	getPopularBlogs,
+	Blog,
+	fetchCommentsByBlog,
+	postBlogComment,
+	BlogComment,
+	getOtherBlogs,
+} from "@/config/blog-actions";
 import BlogImg from "@/assets/images/BlogImg.png";
+import CommentorImg from "@/assets/images/CommentorImg.png";
+import toast from "react-hot-toast";
 
 const BlogContent = () => {
 	const router = useRouter();
 
 	const [posts, setPosts] = useState<Blog[]>([]);
 	const [popularPosts, setPopularPosts] = useState<Blog[]>([]);
+	const [otherPosts, setOtherPosts] = useState<Blog[]>([]);
+	const [comments, setComments] = useState<BlogComment[]>([]);
+	const [postingComment, setPostingComment] = useState<boolean>(false);
 
 	const normalizeResponseToArray = (res: any): Blog[] => {
 		if (!res) return [];
@@ -26,17 +39,87 @@ const BlogContent = () => {
 	useEffect(() => {
 		(async () => {
 			try {
-				const [recentRes, popularRes] = await Promise.all([
+				const [recentRes, popularRes, otherRes] = await Promise.all([
 					getRecentBlogPosts({ numOfBlogs: 6 }),
 					getPopularBlogs({ numOfBlogs: 3 }),
+					getOtherBlogs({ numOfBlogs: 4 }),
 				]);
 				setPosts(normalizeResponseToArray(recentRes));
 				setPopularPosts(normalizeResponseToArray(popularRes));
+				setOtherPosts(normalizeResponseToArray(otherRes));
 			} catch (err) {
 				console.error("Error fetching blog posts:", err);
 			}
 		})();
 	}, []);
+
+	useEffect(() => {
+		const fetchComments = async () => {
+			const blogId = getPostId(posts[0]); // Assuming the first post is the one you want to fetch comments for
+			if (!blogId) return;
+			try {
+				const comments = await fetchCommentsByBlog(blogId);
+				setComments(comments);
+			} catch (error) {
+				console.error(`Fetching comments for blog ${blogId} failed:`, error);
+			}
+		};
+
+		fetchComments();
+	}, [posts]);
+
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		const blogId = getPostId(posts[0]);
+		if (!blogId) {
+			toast.error("Unable to identify the blog post.");
+			return;
+		}
+		const form = e.currentTarget;
+		const formData = new FormData(form);
+		const name = formData.get("name")?.toString().trim() || "";
+		const email = formData.get("email")?.toString().trim() || "";
+		const comment = formData.get("comment")?.toString().trim() || "";
+
+		// Basic Validation
+		if (!name) {
+			toast.error("Please enter your name");
+			return;
+		}
+		if (!email) {
+			toast.error("Please enter your email");
+			return;
+		}
+		// Basic Email Regex
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(email)) {
+			toast.error("Please enter a valid email address");
+			return;
+		}
+		if (!comment) {
+			toast.error("Please enter a comment");
+			return;
+		}
+
+		const loadingToast = toast.loading("Posting your comment...");
+		setPostingComment(true);
+		const postCommentRes = await postBlogComment({
+			name: name,
+			email: email,
+			comment: comment,
+			blogid: blogId,
+			added_time: new Date().toISOString(),
+		});
+
+		if (postCommentRes) {
+			toast.success("Comment posted successfully!", { id: loadingToast });
+			form?.reset();
+			const newComments = await fetchCommentsByBlog(blogId);
+			setComments(newComments);
+		}
+		setPostingComment(false);
+	};
 
 	return (
 		<div className="bg-white min-h-screen">
@@ -71,7 +154,7 @@ const BlogContent = () => {
 										const img = latest?.blog_pic
 											? latest.blog_pic.startsWith("http")
 												? latest.blog_pic
-												: `${process.env.NEXT_PUBLIC_SERVER_BASE_URL ?? ""}/${latest.blog_pic}`
+												: `${process.env.NEXT_PUBLIC_SERVER_BASE_URL ?? ""}/images/blog/${latest.blog_pic}`
 											: "/post-image.jpg";
 										return (
 											<>
@@ -138,7 +221,7 @@ const BlogContent = () => {
 										const img = post?.blog_pic
 											? post.blog_pic.startsWith("http")
 												? post.blog_pic
-												: `${process.env.NEXT_PUBLIC_SERVER_BASE_URL ?? ""}/${post.blog_pic}`
+												: `${process.env.NEXT_PUBLIC_SERVER_BASE_URL ?? ""}/images/blog/${post.blog_pic}`
 											: "/post-thumb.jpg";
 										return (
 											<div
@@ -206,12 +289,18 @@ const BlogContent = () => {
 									const img = post?.blog_pic
 										? post.blog_pic.startsWith("http")
 											? post.blog_pic
-											: `${process.env.NEXT_PUBLIC_SERVER_BASE_URL ?? ""}/${post.blog_pic}`
+											: `${process.env.NEXT_PUBLIC_SERVER_BASE_URL ?? ""}/images/blog/${post.blog_pic}`
 										: "/post-thumb.jpg";
 									return (
 										<div
 											key={id ?? i}
-											className="flex gap-4 items-center bg-gray-50 p-3 rounded-xl"
+											className="flex gap-4 items-center bg-gray-50 p-3 rounded-2xl group cursor-pointer hover:bg-white hover:shadow-md transition-all"
+											onClick={() =>
+												router.push({
+													pathname: "/blog-details",
+													query: { id },
+												})
+											}
 										>
 											<div className="relative w-20 h-16 flex-shrink-0 rounded-lg overflow-hidden">
 												<Image
@@ -236,42 +325,78 @@ const BlogContent = () => {
 						{/* Comments Section */}
 						<div>
 							<h2 className="text-2xl font-bold text-[#94004F] mb-6">Comments</h2>
-							<div className="bg-gray-50 p-6 rounded-xl space-y-4">
-								<div className="flex items-center gap-3">
-									<div className="w-10 h-10 rounded-full bg-orange-200" />
-									<div>
-										<p className="font-bold text-sm">Sarah Jakes</p>
-										<p className="text-[10px] text-gray-400">May 25th, 2025</p>
+
+							{comments.length > 0 ? (
+								comments.map((comment) => (
+									<div
+										key={comment.blog_comment_id}
+										className="bg-gray-50 p-6 rounded-xl space-y-4 mb-4"
+									>
+										<div className="flex items-center gap-3">
+											<Image
+												src={CommentorImg}
+												alt={"commentor_img"}
+												height={40}
+												width={40}
+												className="object-cover"
+											/>
+											<div>
+												<p className="font-bold text-sm">
+													{comment.blog_commentor_name}
+												</p>
+												<p className="text-[10px] text-gray-400">
+													{comment.added_time}
+												</p>
+											</div>
+										</div>
+										<p className="text-xs text-gray-600 leading-relaxed">
+											{comment.blog_commentor_comment}
+										</p>
 									</div>
-								</div>
-								<p className="text-xs text-gray-600 leading-relaxed">
-									Survey plus is changing the game in data collection industry and I can't
-									wait to see what they bring on in the next 5 years.
-								</p>
-							</div>
+								))
+							) : (
+								<div className="text-sm text-gray-500">No comments available.</div>
+							)}
 						</div>
 
 						{/* Leave a Comment Form */}
 						<div className="border border-[#94004F]/30 p-8 rounded-[2rem]">
 							<h2 className="text-2xl font-bold text-[#94004F] mb-6">Leave a comment</h2>
-							<form className="space-y-4">
+							<form noValidate onSubmit={handleSubmit} className="space-y-4">
 								<div>
-									<label className="text-xs font-bold mb-1 block">Name</label>
-									<input type="text" className="w-full bg-gray-100 p-3 rounded-lg text-sm" />
+									<label htmlFor="name" className="text-xs font-bold mb-1 block">
+										Name
+									</label>
+									<input
+										name="name"
+										type="text"
+										className="w-full bg-gray-100 p-3 rounded-lg text-sm"
+									/>
 								</div>
 								<div>
-									<label className="text-xs font-bold mb-1 block">Email</label>
+									<label htmlFor="email" className="text-xs font-bold mb-1 block">
+										Email
+									</label>
 									<input
+										name="email"
 										type="email"
 										className="w-full bg-gray-100 p-3 rounded-lg text-sm"
 									/>
 								</div>
 								<div>
-									<label className="text-xs font-bold mb-1 block">Comment</label>
-									<textarea className="w-full bg-gray-100 p-3 rounded-lg text-sm h-32" />
+									<label htmlFor="comment" className="text-xs font-bold mb-1 block">
+										Comment
+									</label>
+									<textarea
+										name="comment"
+										className="w-full bg-gray-100 p-3 rounded-lg text-sm h-32"
+									/>
 								</div>
-								<button className="bg-[#94004F] text-white w-full py-3 rounded-lg font-bold text-sm hover:brightness-110">
-									Post Now
+								<button
+									disabled={postingComment}
+									className="bg-[#94004F] text-white w-full py-3 rounded-lg font-bold text-sm hover:brightness-110 disabled:bg-[#94004F]/70 transition-all active:scale-95 flex items-center justify-center gap-2"
+								>
+									{postingComment ? <Loader2 /> : <>Post Now</>}
 								</button>
 							</form>
 						</div>

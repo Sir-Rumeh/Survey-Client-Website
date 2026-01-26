@@ -65,6 +65,18 @@ export const getPopularBlogs = async (payload: { numOfBlogs?: number } = {}): Pr
 		throw error;
 	}
 };
+export const getOtherBlogs = async (payload: { numOfBlogs?: number } = {}): Promise<Blog[]> => {
+	try {
+		const body = toUrlEncoded(payload);
+		const res = await AxiosClient.post("/api/blog/fetchBlogs", body);
+		const unwrapped = unwrapData(res);
+		const data = Array.isArray(unwrapped) ? unwrapped : (unwrapped?.blogs ?? unwrapped ?? []);
+		return data as Blog[];
+	} catch (error) {
+		console.error("Fetching other blogs failed:", error);
+		throw error;
+	}
+};
 
 export const searchBlogs = async (payload: { keyword: string }): Promise<Blog[]> => {
 	try {
@@ -84,6 +96,7 @@ export const postBlogComment = async (payload: {
 	email: string;
 	comment: string;
 	blogid: string | number;
+	added_time: string | number;
 }): Promise<{ success?: boolean; message?: string } | any> => {
 	try {
 		const body = toUrlEncoded(payload as Record<string, any>);
