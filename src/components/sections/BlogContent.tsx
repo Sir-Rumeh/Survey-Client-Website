@@ -11,6 +11,7 @@ import {
 	postBlogComment,
 	BlogComment,
 	getOtherBlogs,
+	searchBlogs,
 } from "@/config/blog-actions";
 import BlogImg from "@/assets/images/BlogImg.png";
 import CommentorImg from "@/assets/images/CommentorImg.png";
@@ -24,6 +25,7 @@ const BlogContent = () => {
 	const [otherPosts, setOtherPosts] = useState<Blog[]>([]);
 	const [comments, setComments] = useState<BlogComment[]>([]);
 	const [postingComment, setPostingComment] = useState<boolean>(false);
+	const [searching, setSearching] = useState<boolean>(false);
 
 	const normalizeResponseToArray = (res: any): Blog[] => {
 		if (!res) return [];
@@ -68,6 +70,34 @@ const BlogContent = () => {
 		fetchComments();
 	}, [posts]);
 
+	const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const formData = new FormData(e.currentTarget);
+		const keyword = formData.get("keyword")?.toString().trim() || "";
+
+		if (!keyword) {
+			// If search is cleared, you might want to reload recent posts
+			const recentRes = await getRecentBlogPosts({ numOfBlogs: 6 });
+			setPosts(normalizeResponseToArray(recentRes));
+			return;
+		}
+
+		setSearching(true);
+		try {
+			const results = await searchBlogs({ keyword });
+			const normalizedResults = normalizeResponseToArray(results);
+			setPosts(normalizedResults);
+
+			if (normalizedResults.length === 0) {
+				toast.error("No blogs found matching your search.");
+			}
+		} catch (error) {
+			toast.error("Search failed. Please try again.");
+		} finally {
+			setSearching(false);
+		}
+	};
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
@@ -104,21 +134,26 @@ const BlogContent = () => {
 
 		const loadingToast = toast.loading("Posting your comment...");
 		setPostingComment(true);
-		const postCommentRes = await postBlogComment({
-			name: name,
-			email: email,
-			comment: comment,
-			blogid: blogId,
-			added_time: new Date().toISOString(),
-		});
+		try {
+			const postCommentRes = await postBlogComment({
+				name: name,
+				email: email,
+				comment: comment,
+				blogid: blogId,
+				added_time: new Date().toISOString(),
+			});
 
-		if (postCommentRes) {
-			toast.success("Comment posted successfully!", { id: loadingToast });
-			form?.reset();
-			const newComments = await fetchCommentsByBlog(blogId);
-			setComments(newComments);
+			if (postCommentRes) {
+				toast.success("Comment posted successfully!", { id: loadingToast });
+				form?.reset();
+				const newComments = await fetchCommentsByBlog(blogId);
+				setComments(newComments);
+			}
+		} catch (error) {
+			toast.error("Failed to post comment", { id: loadingToast });
+		} finally {
+			setPostingComment(false);
 		}
-		setPostingComment(false);
 	};
 
 	return (
@@ -140,7 +175,9 @@ const BlogContent = () => {
 					<div className="lg:col-span-8 space-y-16">
 						{/* Latest Post */}
 						<section>
-							<h2 className="text-3xl font-bold text-[#94004F] mb-8">Latest Post</h2>
+							<h2 className="text-3xl font-bold text-[#94004F] mb-8">
+								{searching ? "Search Results" : "Latest Post"}
+							</h2>
 							<div className="space-y-6">
 								{posts[0] ? (
 									(() => {
@@ -187,21 +224,12 @@ const BlogContent = () => {
 										);
 									})()
 								) : (
-									<div>
-										<div className="relative aspect-video rounded-[2rem] overflow-hidden shadow-lg">
-											<Image
-												src="/post-image.jpg"
-												alt="Latest Post"
-												fill
-												className="object-cover"
-											/>
-										</div>
-										<h3 className="text-2xl md:text-3xl font-bold text-[#94004F]">
-											6 Best Ways To Increase Your Survey Response Rates
-										</h3>
-										<p className="text-gray-700 leading-relaxed text-lg">
-											A curated selection of our latest insights.
-										</p>
+									<div className="py-10 text-center text-gray-500">
+										{searching ? (
+											<Loader2 className="animate-spin mx-auto" />
+										) : (
+											"No posts found."
+										)}
 									</div>
 								)}
 							</div>
@@ -210,7 +238,7 @@ const BlogContent = () => {
 						{/* Popular Posts */}
 						<section>
 							<h2 className="text-3xl font-bold text-[#94004F] mb-8">Popular Posts</h2>
-							<div className="space-y-8">
+							<div className="space-y-8 max-h-[650px]">
 								{popularPosts.length > 0 ? (
 									popularPosts.map((post, i) => {
 										const id = getPostId(post);
@@ -268,21 +296,30 @@ const BlogContent = () => {
 					{/* --- Sidebar Area (4 Columns) --- */}
 					<aside className="lg:col-span-4 space-y-12">
 						{/* Search Bar */}
-						<div className="relative flex items-center">
+						<form onSubmit={handleSearch} className="relative flex items-center">
 							<input
+								name="keyword"
 								type="text"
 								placeholder="Search"
 								className="w-full bg-gray-100 rounded-lg py-3 px-4 focus:outline-none border border-gray-200"
 							/>
-							<button className="absolute right-0 bg-[#94004F] p-3 rounded-r-lg text-white">
-								<Search size={20} />
+							<button
+								disabled={searching}
+								type="submit"
+								className="absolute right-0 bg-[#94004F] p-3 rounded-r-lg text-white disabled:opacity-70"
+							>
+								{searching ? (
+									<Loader2 className="animate-spin" size={20} />
+								) : (
+									<Search size={20} />
+								)}
 							</button>
-						</div>
+						</form>
 
 						{/* Other Posts */}
 						<div>
 							<h2 className="text-2xl font-bold text-[#94004F] mb-6">Other Posts</h2>
-							<div className="space-y-4">
+							<div className="space-y-4 max-h-[500px] overflow-y-auto">
 								{posts.slice(1, 5).map((post, i) => {
 									const id = getPostId(post);
 									const title = post?.blog_title ?? "Untitled";
@@ -325,38 +362,45 @@ const BlogContent = () => {
 						{/* Comments Section */}
 						<div>
 							<h2 className="text-2xl font-bold text-[#94004F] mb-6">Comments</h2>
-
-							{comments.length > 0 ? (
-								comments.map((comment) => (
-									<div
-										key={comment.blog_comment_id}
-										className="bg-gray-50 p-6 rounded-xl space-y-4 mb-4"
-									>
-										<div className="flex items-center gap-3">
-											<Image
-												src={CommentorImg}
-												alt={"commentor_img"}
-												height={40}
-												width={40}
-												className="object-cover"
-											/>
-											<div>
-												<p className="font-bold text-sm">
-													{comment.blog_commentor_name}
-												</p>
-												<p className="text-[10px] text-gray-400">
-													{comment.added_time}
-												</p>
+							<div className="w-full max-h-[500px] overflow-y-auto">
+								{comments.length > 0 ? (
+									comments.map((comment) => (
+										<div
+											key={comment.blog_comment_id}
+											className="bg-gray-50 p-6 rounded-xl space-y-4 mb-4"
+										>
+											<div className="flex items-center gap-3">
+												<Image
+													src={CommentorImg}
+													alt={"commentor_img"}
+													height={40}
+													width={40}
+													className="object-cover"
+												/>
+												<div>
+													<p className="font-bold text-sm">
+														{comment.blog_commentor_name}
+													</p>
+													<p className="text-[10px] text-gray-400">
+														{new Date(comment.added_time)
+															.toLocaleDateString("en-GB", {
+																day: "numeric",
+																month: "short",
+																year: "numeric",
+															})
+															.replace(/ (\d{4})$/, ", $1")}
+													</p>
+												</div>
 											</div>
+											<p className="text-xs text-gray-600 leading-relaxed">
+												{comment.blog_commentor_comment}
+											</p>
 										</div>
-										<p className="text-xs text-gray-600 leading-relaxed">
-											{comment.blog_commentor_comment}
-										</p>
-									</div>
-								))
-							) : (
-								<div className="text-sm text-gray-500">No comments available.</div>
-							)}
+									))
+								) : (
+									<div className="text-sm text-gray-500">No comments available.</div>
+								)}
+							</div>
 						</div>
 
 						{/* Leave a Comment Form */}
@@ -396,7 +440,7 @@ const BlogContent = () => {
 									disabled={postingComment}
 									className="bg-[#94004F] text-white w-full py-3 rounded-lg font-bold text-sm hover:brightness-110 disabled:bg-[#94004F]/70 transition-all active:scale-95 flex items-center justify-center gap-2"
 								>
-									{postingComment ? <Loader2 /> : <>Post Now</>}
+									{postingComment ? <Loader2 className="animate-spin" /> : <>Post Now</>}
 								</button>
 							</form>
 						</div>
