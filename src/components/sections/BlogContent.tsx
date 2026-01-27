@@ -55,7 +55,7 @@ const BlogContent = () => {
 	const [comments, setComments] = useState<BlogComment[]>([]);
 	const [postingComment, setPostingComment] = useState<boolean>(false);
 	const [searching, setSearching] = useState<boolean>(false);
-	const [initialLoading, setInitialLoading] = useState<boolean>(true); // Added loading state
+	const [initialLoading, setInitialLoading] = useState<boolean>(true);
 
 	const normalizeResponseToArray = (res: any): Blog[] => {
 		if (!res) return [];
@@ -82,7 +82,7 @@ const BlogContent = () => {
 			} catch (err) {
 				console.error("Error fetching blog posts:", err);
 			} finally {
-				setInitialLoading(false); // Disable skeleton once data arrives
+				setInitialLoading(false);
 			}
 		})();
 	}, []);
@@ -137,8 +137,15 @@ const BlogContent = () => {
 			toast.error("Unable to identify the blog post.");
 			return;
 		}
+
 		const form = e.currentTarget;
 		const formData = new FormData(form);
+
+		const honeypot = formData.get("website_url")?.toString();
+		if (honeypot) {
+			return;
+		}
+
 		const name = formData.get("name")?.toString().trim() || "";
 		const email = formData.get("email")?.toString().trim() || "";
 		const comment = formData.get("comment")?.toString().trim() || "";
@@ -308,7 +315,7 @@ const BlogContent = () => {
 						)}
 					</div>
 
-					{/* Sidebar (No change to content logic, but wrapped search button for consistency) */}
+					{/* Sidebar */}
 					<aside className="lg:col-span-4 space-y-12">
 						<form onSubmit={handleSearch} className="relative flex items-center">
 							<input
@@ -330,7 +337,6 @@ const BlogContent = () => {
 							</button>
 						</form>
 
-						{/* Other Posts & Comments - keeping original logic from file */}
 						<div>
 							<h2 className="text-2xl font-bold text-[#94004F] mb-6">Other Posts</h2>
 							<div className="space-y-4 max-h-[500px] overflow-y-auto">
@@ -411,6 +417,10 @@ const BlogContent = () => {
 						<div className="border border-[#94004F]/30 p-8 rounded-[2rem]">
 							<h2 className="text-2xl font-bold text-[#94004F] mb-6">Leave a comment</h2>
 							<form noValidate onSubmit={handleSubmit} className="space-y-4">
+								<div className="hidden" aria-hidden="true">
+									<input name="website_url" type="text" tabIndex={-1} autoComplete="off" />
+								</div>
+
 								<div>
 									<label htmlFor="name" className="text-xs font-bold mb-1 block">
 										Name

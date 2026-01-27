@@ -127,6 +127,12 @@ const BlogDetailsContent = () => {
 
 		const form = e.currentTarget;
 		const formData = new FormData(form);
+
+		const honeypot = formData.get("website_url")?.toString();
+		if (honeypot) {
+			return;
+		}
+
 		const name = formData.get("name")?.toString().trim();
 		const email = formData.get("email")?.toString().trim();
 		const comment = formData.get("comment")?.toString().trim();
@@ -204,6 +210,10 @@ const BlogDetailsContent = () => {
 								Leave a comment
 							</h2>
 							<form onSubmit={handleCommentSubmit} className="grid grid-cols-1 gap-6">
+								<div className="hidden" aria-hidden="true">
+									<input name="website_url" type="text" tabIndex={-1} autoComplete="off" />
+								</div>
+
 								<div className="space-y-2">
 									<label className="text-sm font-bold text-gray-700">Name</label>
 									<input
